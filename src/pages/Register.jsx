@@ -2,12 +2,18 @@ import { useState } from 'react'
 import Button from '../components/Button'
 import Input from '../components/Input'
 import { Link } from 'react-router-dom'
+import { useUserStore } from "../store/store"
+
 
 const Register = () => {
     const [error, setError] = useState('')
 
-    const handleSubmit = (e) => {}
+    const setSession = useUserStore((state) => state.setSession)
 
+    const handleSubmit = (e) => {
+        setSession()
+    }
+    
     return (
         <div className="container">
             <div class="auth-container">

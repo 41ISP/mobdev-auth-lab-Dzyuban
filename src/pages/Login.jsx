@@ -2,10 +2,19 @@ import { Link } from "react-router-dom"
 import Button from "../components/Button"
 import Input from "../components/Input"
 import { useState } from "react"
+import { useUserStore } from "../store/store"
 
 const Login = () => {
     const [error, setError] = useState("")
-    const handleSubmit = () => {}
+
+    const setSession = useUserStore((state) => state.setSession)
+
+    const handleSubmit = фынтс (e) => {
+        e.preventDefault()
+        const 1 =
+        const 2 = 
+        setSession(session)
+    }
 
     return (
         <div className="container">
