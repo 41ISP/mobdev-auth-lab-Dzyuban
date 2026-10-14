@@ -44,9 +44,14 @@ const getItems = async () => {
     const res = await apiInstance.get('/items')
     return res.data
 }
+const deleteItems = async (id) => {
+    const res = await apiInstance.delete('/items/${id}')
+    return res.data
+}
 export const api = {
     registerUser,
     loginUser,
     sendItems,
     getItems,
+    deleteItems,
 }
