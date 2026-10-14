@@ -8,6 +8,13 @@ const apiInstance = axios.create({
         Accept: "application/json",
     },
 })
+apiInstance.interceptors.request.use((config) => {
+    const { session } = useUserStore.getState()
+    if (session?.token) {
+        config.headers.Authorization = `bearer ${session.token}`
+    }
+     return config
+})
 
 apiInstance.interceptors.request.use((config) => {
     const { session } = useUserStore.getState()
@@ -29,7 +36,17 @@ const loginUser = async (dtn) => {
     return res
 }
 
+const sendItems = async (item) => {
+    const res = await apiInstance.post("/items", item)
+    return res.data
+}
+const getItems = async () => {
+    const res = await apiInstance.get('/items')
+    return res.data
+}
 export const api = {
     registerUser,
     loginUser,
+    sendItems,
+    getItems,
 }
