@@ -1,8 +1,20 @@
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import Input from "../components/Input"
 import Button from "../components/Button"
+import { useState } from "react"
 
 const ItemDetail = () => {
+
+    const { id } = useParams()
+
+    const {Item, setItem} = useState(null)
+
+    useEffect(() => {
+    const allItems = await api.getItems()
+    const foundItem = allItems.find((i) => i.id === id)
+    setItem(foundItem)
+    }
+
     const handleBid = () => {}
     
     return (

@@ -1,4 +1,8 @@
+import { NavLink } from "react-router-dom"
+
+
 const ItemCard = ({
+    id,
     status,
     title,
     description,
@@ -9,6 +13,7 @@ const ItemCard = ({
     imageUrl,
 }) => {
     return (
+    <NavLink to={`/item/${id}`} className="item-card-limk">
         <div className="item-card">
             <img src={imageUrl} class="item-image" />
             <div class="item-content">
@@ -29,6 +34,7 @@ const ItemCard = ({
                 </div>
             </div>
         </div>
+    </NavLink>
     )
 }
 
