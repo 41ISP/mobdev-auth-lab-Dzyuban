@@ -28,6 +28,25 @@ const ItemDetail = () => {
         return <div className="container">Загрузка товара...</div>
     }
     
+    const itemDelete = async () => {
+        // Спрашиваем подтверждение (защита от случайного клика)
+        const isConfirmed = window.confirm("Вы уверены, что хотите удалить этот товар?")
+        if (!isConfirmed) return
+
+        try {
+            // Вызываем функцию из api.js
+            await api.deleteItem(id) 
+            
+            // Если сервер ответил успешно, уходим на главную
+            navigate("/")
+        } catch (error) {
+            // Если сервер запретил (например, 403 или 400), показываем ошибку
+            const errorMsg = error.response?.data?.error || error.response?.data?.message || "Упс! Ошибочка"
+            alert(errorMsg) 
+        }
+    }
+
+    
     return (
         <div className="container">
 
@@ -43,7 +62,12 @@ const ItemDetail = () => {
                         <span className="item-status">{item.status}</span>
                             
                         <h1 className="item-title-large">{item.title}</h1>
-                            
+                        <Button
+                            onClick={itemDelete} 
+                            style={{ backgroundColor: '#dc3545', color: 'white', padding: '8px 16px', marginTop: '10px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                            >
+                        Удалить товар
+                        </Button>
                         <div className="item-seller-info">
                             <div className="seller-avatar">TS</div>
                             <div className="seller-details">
