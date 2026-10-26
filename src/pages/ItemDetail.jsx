@@ -21,8 +21,38 @@ const ItemDetail = () => {
     
     loadItem()
     }, [id])
-    const handleBid = (e) => {
+    const handleBid = async (e) => {
         e.preventDefault()
+        // Берем сумму из инпута и превращаем в число
+        const bidAmount = Number(e.target.bidInput.value)
+        if (!bidAmount) {
+            alert("Введите сумму ставки")
+            return
+        }
+         const currentPrice = item.highestBid || item.price
+        if (bidAmount <= currentPrice) {
+            alert(`Ваша ставка должна быть больше, чем ${currentPrice} ₽`)
+            return
+        }
+        try {
+            // Отправляем на сервер (замени makeBid на название из твоего api.js)
+            await api.createBids(id, bidAmount) 
+            
+            // ОБНОВЛЯЕМ ЭКРАН: снова запрашиваем товар, чтобы увидеть новую ставку
+            const allItems = await api.getItems()
+            // find - метод, перебирает все элементы массива и возвращает первый элемент который удовлетворяет условию
+            const foundItem = allItems.find((i) => i.id == id)
+            setItem(foundItem)
+
+            // Очищаем поле ввода
+            e.target.bidInput.value = ""
+            
+            alert("Ставка успешно сделана! 🎉")
+        } catch (error) {
+            // Ловим ошибки от сервера (например, если нельзя ставить на свой товар)
+            const errorMsg = error.response?.data?.error || error.response?.data?.message || "Ошибка при ставке"
+            alert(errorMsg)
+        }
     }
     if (!item) {
         return <div className="container">Загрузка товара...</div>
