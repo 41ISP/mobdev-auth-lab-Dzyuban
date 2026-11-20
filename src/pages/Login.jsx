@@ -1,11 +1,38 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Button from "../components/Button"
 import Input from "../components/Input"
 import { useState } from "react"
+import { useUserStore } from '../store/useUserStore'
+import { api } from "../api/api"
+
 
 const Login = () => {
     const [error, setError] = useState("")
-    const handleSubmit = () => {}
+
+    const setSession = useUserStore((state) => state.setSession)
+
+    const navigate = useNavigate()
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setError('')
+
+        const dtn = {
+            username: e.target.username.value,
+            password: e.target.password.value,
+        }
+
+         try {
+            const response = await api.loginUser(dtn)
+            setSession(response.data)
+            navigate("/")
+        } catch (error) {
+            setError(error.response.data.error)
+            console.error(error)
+        }
+
+        setSession(session)
+    }
 
     return (
         <div className="container">
@@ -23,7 +50,8 @@ const Login = () => {
 
                 <form id="login-form" onSubmit={handleSubmit}>
                     <div class="form-group">
-                        <label class="form-label">Имя пользователя</label>
+                        {error.length > 0 && <div className="auth-error">{error}</div>}
+                        <label onSubmit={handleSubmit} class="form-label">Имя пользователя</label>
                         <Input
                             type="text"
                             class="form-input"

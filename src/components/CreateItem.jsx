@@ -1,8 +1,28 @@
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import Input from './Input'
+import { useState } from 'react'
+import { api } from '../api/api'
+
 
 const CreateItem = () => {
-    const handleSubmit = () => {}
+
+    const [error, setError] = useState("")
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        const item = {
+            title: e.target.title.value,
+            description: e.target.description.value,
+            price: Number(e.target.price.value),
+            imageUrl: e.target.imageUrl.value,
+        }
+        try{await api.sendItems(item)
+            
+        Navigate('/')}catch(error) {setError(error.response?.data?.error || 'ошибка! повторите дейтсвие!')
+            console.log(error)
+        }
+       
+    }
     return (
         <div className="container">
             <div class="page-header">

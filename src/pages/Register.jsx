@@ -2,12 +2,43 @@ import { useState } from 'react'
 import Button from '../components/Button'
 import Input from '../components/Input'
 import { Link } from 'react-router-dom'
+import { useUserStore } from '../store/useUserStore'
+import { api } from '../api/api'
+
+
+
 
 const Register = () => {
     const [error, setError] = useState('')
 
-    const handleSubmit = (e) => {}
+    const setSession = useUserStore((state) => state.setSession)
 
+    const handleSubmit = async (e) => {
+        setSession('')
+         e.preventDefault()
+        setError("")
+
+        if (e.target.password.value !== e.target.password2.value) {
+            setError("Пароли не совпадают")
+            return
+        }
+
+        const user = {
+            username: e.target.username.value,
+            email: e.target.email.value,
+            password: e.target.password.value,
+        }
+
+        try {
+            const data = await api.registerUser(user)
+            setSession(data.data)
+            navigate("/")
+        } catch (error) {
+            setError(error.response.data.error)
+            console.error(error)
+        }
+    }
+    
     return (
         <div className="container">
             <div class="auth-container">
